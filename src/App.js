@@ -19,11 +19,17 @@ class App extends React.Component {
   handleSumbit = (event) => {
     event.preventDefault();
     //get form data now
+
     let firstName = event.target.firstName.value;
     let lastName = event.target.lastName.value;
-    console.log("form: ", firstName, lastName);
+    // console.log("form: ", firstName, lastName);
 
 
+    let userName = event.target.userName.value;
+    this.setState({
+      userName: userName
+    })
+    console.log('user in state yet?', this.state.userName);
 
 
 
@@ -45,12 +51,30 @@ class App extends React.Component {
 
   handleSelect = (event) => {
     //grab value from select in the form then if/else to tell even or odd or all.
+    let selected = event.target.value;
+    console.log(selected);
+
+    //if even or odd or all
+    if(selected === "even"){
+      //filter over array of numbers and find even
+     let newData = data.filter((number) => number % 2 === 0);
+      //we need to update state to rerender just the even nums
+      this.setState({sortedData: newData});
+    } else if(selected === 'odd'){
+       //filter over array of numbers and find even
+       let newData = data.filter((number) => number % 2 !== 0);
+      //we need to update state to rerender just the even nums
+      this.setState({sortedData: newData});
+    } else {
+      //give back all the numbers
+      this.setState({sortedData: data})
+    }
   };
 
   render() {
     // console.log(data);
-    console.log("STATE:", this.state.userName);
-    let numbers = data.map((number, index) => {
+    console.log("STATE:", this.state.sortedData);
+    let numbers = this.state.sortedData.map((number, index) => {
       return <ListGroupItem key={index}>{number}</ListGroupItem>;
     });
     return (
@@ -73,7 +97,7 @@ class App extends React.Component {
             <Form.Control type="text" />
           </FormGroup>
 
-          <Form.Label forHTML="lastName">Last Name:</Form.Label>
+          <Form.Label htmlFor="lastName">Last Name:</Form.Label>
           <Form.Control type="text" name="lastName" id="lastName" />
 
           <p>Selected Numbers</p>
